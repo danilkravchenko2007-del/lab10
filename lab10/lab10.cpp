@@ -1,9 +1,9 @@
-#include <iostream>
+﻿#include <iostream>
 #include <stdlib.h>
 #include <ctime>
 
 using namespace std;
-void packData(short* source, int N, int* packed) // ������� 2(�). ��������.
+void packData(short* source, int N, int* packed) // Задание 2(А). Упаковка.
 {
 	short* end = source + N;
 
@@ -15,7 +15,7 @@ void packData(short* source, int N, int* packed) // ������� 2(�). ��������.
 	}
 }
 
-void unpackData(int* packed, short* unpacked) // ������� 2(�). ����������.
+void unpackData(int* packed, short* unpacked) // Задание 2(Б). Распаковка.
 {
 	short* ptr = unpacked;
 	for (short value = 0; value <= 17; value++)
@@ -31,21 +31,28 @@ void unpackData(int* packed, short* unpacked) // ������� 2(�). ����������.
 }
 int main()
 {
-	int N;
-	cout << "������� ����� ��������� ������� (����� 1000): " << endl;
-	cin >> N;
+	setlocale(LC_ALL, "Russian");
+	int N = 0;
+
+	while (N < 1000)
+	{
+		cout << "Введите длину исходного массива (более 1000): " << endl;
+		cin >> N;
+	}
+	
 
 	int packed[18] = { 0 };
-	short source[N] = { 0 };
-	short unpacked[N] = { 0 };
-	// ������� ��������� �������� ������
+	short* source = new short[N];
+	short* unpacked = new short[N];
+
+	// Создаем рандомный исходный массив
 
 	srand(time(NULL));
 	int randomCounts[18] = { 0 };
 
 	for (int i = 0; i < N; i++)
 	{
-		short randomValue = rand() % 17;
+		short randomValue = rand() % 18;
 		randomCounts[randomValue]++;
 	}
 
@@ -62,6 +69,25 @@ int main()
 	packData(source, N, packed);
 	unpackData(packed, unpacked);
 
-	cout << packed << endl;
-	cout << unpacked << endl;
+	cout << "\n==== Результат упаковки ====" << endl;
+	for (int i = 0; i < 18; i++)
+	{
+		cout << "Количество " << i << " в исходном массиве " << packed[i] << endl;
+	}
+
+	cout << endl;
+
+	short Success = 1;
+
+	for (int i = 0; i < N; i++)
+	{
+		if (source[i] != unpacked[i]) Success = 0;
+	}
+
+	cout << "\n==== Результат распаковки ====" << endl;
+
+	if (Success == 1) cout << "Исходный и распакованный массивы равны, распаковка прошла успешно" << endl;
+	else cout << "Исходный и распакованный массивы не равны, распаковка выполнена не верно" << endl;
+
+	return 0;
 }
